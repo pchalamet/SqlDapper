@@ -4,6 +4,8 @@ This is a simple library to generate SQL based on POCO (or better PORO 🎉).
 
 It maps collections, records and anonymous types to SQL so this can be used with Dapper.
 
+This library does not cache and is reflection base - hence it's not the most efficient library around.
+
 NOTE: Upsert function is really Mssql centric. You have been warned.
 
 # Plain Old Record Object
