@@ -32,7 +32,7 @@ Create a connection using `DapperConnection` implementing `IDapperConnection`.
 # Usage
 ```C#
 var conn = new DapperConnection("<your connection string>");
-var status = conn.Select<DbStatusEx>(new { Name = "toto" })
+var status = conn.Select<DbStatusEx>(new { Name = "toto" });
 ```
 
 # Raw connection methods
@@ -68,4 +68,13 @@ var prm = new { Name = "tagada", Status = 42 };
 using var tx = conn.TransactionScope();
 conn.Upsert<DbStatus>(prm);
 tx.Complete();
+```
+
+This generates following SQL:
+```SQL
+MERGE INTO [Status] as TARGET 
+USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status])
+ON SOURCE.[Name]=TARGET.[Name]
+WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] 
+WHEN NOT MATCHED THEN INSERT ([Name],[Status]) VALUES (SOURCE.[Name],SOURCE.[Status]);
 ```
