@@ -48,6 +48,8 @@ Operation | Description
 `TransactionScope` | Create a transaction scope - transaction must be disposed
 
 # SQL builder methods
+Following operations are available as extension methods on `IDapperConnection`:
+
 Operation | Description
 ----------|------------
 `Select<Table>` | Run select query using the conditions and returns a list of result of `Table`
