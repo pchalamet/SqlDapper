@@ -79,8 +79,7 @@ tx.Complete();
 This generates following SQL:
 ```SQL
 MERGE INTO [Status] as TARGET 
-USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status])
-ON SOURCE.[Name]=TARGET.[Name]
+USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status]) ON SOURCE.[Name]=TARGET.[Name]
 WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] 
 WHEN NOT MATCHED THEN INSERT ([Name],[Status]) VALUES (SOURCE.[Name],SOURCE.[Status]);
 ```
