@@ -4,7 +4,7 @@ using Dapper;
 
 namespace SqlDapper;
 
-public record DapperConnection(string ConnectionString) : IDapperConnection {
+public record MssqlDapperConnection(string ConnectionString) : IDapperConnection {
     private readonly Lazy<TransactionScope> tx = new(() => new TransactionScope());
     private readonly Lazy<SqlConnection> connection = new(() => new SqlConnection(ConnectionString));
 

@@ -1,6 +1,6 @@
 namespace SqlDapper;
 
-public static class DapperConnectionExtensions {
+public static class MssqlConnectionExtensions {
     public static void Upsert<Table>(this IDapperConnection connection, object entity) {
         // MERGE INTO <Table> as TARGET
         // USING ( VALUES(@Name, @Status) ) AS SOURCE ([Name], [Status]) ON SOURCE.[Name] = TARGET.[Name]
