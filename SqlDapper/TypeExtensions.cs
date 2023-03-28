@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace SqlDapper;
 
-public static class TypeExtensions {
+internal static class TypeExtensions {
     public static Type GetUnderlyingType(this Type t) {
         var itf = Array.Find(t.GetInterfaces(),
                              it => it.IsGenericType

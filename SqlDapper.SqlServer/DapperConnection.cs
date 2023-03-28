@@ -4,9 +4,9 @@ using Dapper;
 
 namespace SqlDapper;
 
-public record DapperConnection(string connectionString) : IDapperConnection {
-    private Lazy<TransactionScope> tx = new Lazy<TransactionScope>(() => new TransactionScope());
-    private Lazy<SqlConnection> connection = new Lazy<SqlConnection>(() => new SqlConnection(connectionString));
+public record DapperConnection(string ConnectionString) : IDapperConnection {
+    private readonly Lazy<TransactionScope> tx = new(() => new TransactionScope());
+    private readonly Lazy<SqlConnection> connection = new(() => new SqlConnection(ConnectionString));
 
     public void Dispose() {
         if (connection.IsValueCreated) {
