@@ -1,6 +1,6 @@
 # SqlDapper
 
-This is a simple library to generate SQL based on POCO (or better PORO 🎉).
+This is a simple library to generate SQL based on POCO (or better PORO 🎉). This is the C# version of my F# library [FSharpDapper](https://github.com/pchalamet/FSharpDapper).
 
 It maps collections, records and anonymous types to SQL so this can be used with Dapper.
 
