@@ -4,7 +4,7 @@ This is a simple library to generate SQL based on POCO (or better PORO 🎉). Th
 
 It maps collections, records and anonymous types to SQL so this can be used with Dapper.
 
-This library does not cache and is reflection base - hence it's not the most efficient library around.
+This library does not cache and is reflection base - hence it's not the most efficient library around. It just works™️.
 
 NOTE: Upsert function is really Mssql centric. You have been warned.
 
@@ -65,6 +65,8 @@ Operation | Description
 
 ## Upsert
 ```C#
+using SqlDapper;
+
 [Table("Status")]
 public record DbStatus([property: Key] string Name, int Status);
 
