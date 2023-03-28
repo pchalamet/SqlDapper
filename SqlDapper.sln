@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDapper", "SqlDapper\SqlD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDapper.Tests", "SqlDapper.Tests\SqlDapper.Tests.csproj", "{EA304144-D5F8-4615-959C-D05F7C2CCB27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDapper.SqlServer", "SqlDapper.SqlServer\SqlDapper.SqlServer.csproj", "{95F49119-AC43-4E33-A8B6-CAFD0B559A2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDapper.SqlServer.Tests", "SqlDapper.SqlServer.Tests\SqlDapper.SqlServer.Tests.csproj", "{180B7495-54AD-4834-8D4C-092ECBFD25DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{EA304144-D5F8-4615-959C-D05F7C2CCB27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA304144-D5F8-4615-959C-D05F7C2CCB27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA304144-D5F8-4615-959C-D05F7C2CCB27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95F49119-AC43-4E33-A8B6-CAFD0B559A2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95F49119-AC43-4E33-A8B6-CAFD0B559A2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95F49119-AC43-4E33-A8B6-CAFD0B559A2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95F49119-AC43-4E33-A8B6-CAFD0B559A2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{180B7495-54AD-4834-8D4C-092ECBFD25DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{180B7495-54AD-4834-8D4C-092ECBFD25DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{180B7495-54AD-4834-8D4C-092ECBFD25DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{180B7495-54AD-4834-8D4C-092ECBFD25DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -6,7 +6,9 @@ It maps collections, records and anonymous types to SQL so this can be used with
 
 This library does not cache and is reflection base - hence it's not the most efficient library around. It just works™️.
 
-NOTE: Upsert function is really Mssql centric. You have been warned.
+Implementation is provided for:
+* Generic SQL (`Select`, `Insert`, `Update`, `Delete`)
+* Specialized dialect MSSQL (`Upsert`)
 
 # Plain Old Record Object
 In order to read/write data, you will need to define a record first:
@@ -47,7 +49,7 @@ Operation | Description
 `Query<T>` | Run provided sql query using the parameter and returns a list of result of `T`
 `TransactionScope` | Create a transaction scope - transaction must be disposed
 
-# SQL builder methods
+# Generic SQL builder methods
 Following operations are available as extension methods on `IDapperConnection`:
 
 Operation | Description
@@ -57,9 +59,17 @@ Operation | Description
 `Insert<Table>` | Insert values into table `Table`
 `Update<Table>` | Update table Table` with values
 `Delete<Table>` | Delete table `Table` using the conditions
+
+`Insert`, `Update`, `Delete` support either a single value or a list. A value is either a record or an anonymous record.
+
+# MSSQL builder methods
+Following operations are available as extension methods on `IDapperConnection`:
+
+Operation | Description
+----------|------------
 `Upsert<Table>` | Upsert values into table `Table'`. NOTE: as of now, Mssql centric.
 
-`Insert`, `Update`, `Delete` and `Upsert` support either a single value or a list. A value is either a record or an anonymous record.
+`Upsert` support either a single value or a list. A value is either a record or an anonymous record.
 
 # Examples
 

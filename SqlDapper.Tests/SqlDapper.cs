@@ -110,58 +110,6 @@ public class SqlDapperTests {
     }
 
     [Test]
-    public void GenSQLUpsert() {
-        var prm = new { Name = "tagada", Status = 42 };
-        var repository = new MockRepository(MockBehavior.Strict);
-        var conn = repository.Create<IDapperConnection>();
-
-        conn.Setup(dc => dc.Execute("MERGE INTO [Status] as TARGET USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status]) ON SOURCE.[Name]=TARGET.[Name] WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] WHEN NOT MATCHED THEN INSERT ([Name],[Status]) VALUES (SOURCE.[Name],SOURCE.[Status]);", prm)).Returns(1);
-
-        conn.Object.Upsert<DbStatus>(prm);
-
-        Mock.VerifyAll();
-    }
-
-    [Test]
-    public void GenSQLUpsertWithPartialTable() {
-        var prm = new { Name = "tagada", Status = 42 };
-        var repository = new MockRepository(MockBehavior.Strict);
-        var conn = repository.Create<IDapperConnection>();
-
-        conn.Setup(dc => dc.Execute("MERGE INTO [StatusEx] as TARGET USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status]) ON SOURCE.[Name]=TARGET.[Name] WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] WHEN NOT MATCHED THEN INSERT ([Name],[Status]) VALUES (SOURCE.[Name],SOURCE.[Status]);", prm)).Returns(1);
-
-        conn.Object.Upsert<DbStatusEx>(prm);
-
-        Mock.VerifyAll();
-    }
-
-    [Test]
-    public void GenSQLUpsertKO() {
-        var prm = new { Name = "tagada", Status = 42 };
-        var repository = new MockRepository(MockBehavior.Strict);
-        var conn = repository.Create<IDapperConnection>();
-
-        conn.Setup(dc => dc.Execute("MERGE INTO [Status] as TARGET USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status]) ON SOURCE.[Name]=TARGET.[Name] WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] WHEN NOT MATCHED THEN INSERT ([Name],[Status]) VALUES (SOURCE.[Name],SOURCE.[Status]);", prm)).Returns(0);
-
-        Assert.Throws<Exception>(() => conn.Object.Upsert<DbStatus>(prm));
-
-        Mock.VerifyAll();
-    }
-
-    [Test]
-    public void GenSQLUpsertMultiKey() {
-        var prm = new { Name = "tagada", Count = 2, Status = 42 };
-        var repository = new MockRepository(MockBehavior.Strict);
-        var conn = repository.Create<IDapperConnection>();
-
-        conn.Setup(dc => dc.Execute("MERGE INTO [Monitoring] as TARGET USING (VALUES(@Name,@Count,@Status)) AS SOURCE ([Name],[Count],[Status]) ON SOURCE.[Name]=TARGET.[Name] AND SOURCE.[Count]=TARGET.[Count] WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] WHEN NOT MATCHED THEN INSERT ([Name],[Count],[Status]) VALUES (SOURCE.[Name],SOURCE.[Count],SOURCE.[Status]);", prm)).Returns(1);
-
-        conn.Object.Upsert<DbMonitoring>(prm);
-
-        Mock.VerifyAll();
-    }
-
-    [Test]
     public void GenSQLUseTransaction() {
         var prm = new { Name = "tagada", Status = 42 };
         var repository = new MockRepository(MockBehavior.Strict);
@@ -169,7 +117,7 @@ public class SqlDapperTests {
         var tx = repository.Create<IDapperTransactionScope>();
         var conn = repository.Create<IDapperConnection>();
         conn.InSequence(seq).Setup(dc => dc.TransactionScope()).Returns(tx.Object);
-        conn.InSequence(seq).Setup(dc => dc.Execute("MERGE INTO [Status] as TARGET USING (VALUES(@Name,@Status)) AS SOURCE ([Name],[Status]) ON SOURCE.[Name]=TARGET.[Name] WHEN MATCHED THEN UPDATE SET [Status]=SOURCE.[Status] WHEN NOT MATCHED THEN INSERT ([Name],[Status]) VALUES (SOURCE.[Name],SOURCE.[Status]);", prm)).Returns(1);
+        conn.InSequence(seq).Setup(dc => dc.Execute("INSERT INTO [Status] ([Name],[Status]) VALUES (@Name,@Status)", prm)).Returns(1);
         tx.InSequence(seq).Setup(t => t.Complete());
         tx.InSequence(seq).Setup(t => t.Dispose());
 
@@ -179,7 +127,7 @@ public class SqlDapperTests {
 
         void runInTx() {
             using var tx = conn.Object.TransactionScope();
-            conn.Object.Upsert<DbStatus>(prm);
+            conn.Object.Insert<DbStatus>(prm);
             tx.Complete();
         }
     }

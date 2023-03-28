@@ -10,4 +10,3 @@ public interface IDapperConnection : IDisposable {
     int Execute(string sql, object prms);
     IDapperTransactionScope TransactionScope();
 }
-
