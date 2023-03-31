@@ -14,4 +14,17 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.1" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <!-- https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets#packing-using-a-nuspec -->
+    <PackageId>SqlDapper.SqlServer</PackageId>
+    <Authors>Pierre Chalamet</Authors>
+    <Title>SqlDapper.SqlServer</Title>
+    <Description>SqlDapper - dynamic SQL Generator for Dapper.</Description>
+    <Copyright>Copyright 2023 Pierre Chalamet</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/pchalamet/SqlDapper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pchalamet/SqlDapper.git</RepositoryUrl>
+    <PackageTags>dapper;sql</PackageTags>
+  </PropertyGroup>
+
 </Project>
