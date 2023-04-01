@@ -1,5 +1,7 @@
 # SqlDapper
 
+[![Build status](https://github.com/pchalamet/SqlDapper/workflows/build/badge.svg)](https://github.com/pchalamet/SqlDapper/actions?query=workflow%3Abuild) 
+
 This is a simple library to generate SQL based on POCO (or better PORO 🎉). This is the C# version of my F# library [FSharpDapper](https://github.com/pchalamet/FSharpDapper).
 
 It maps collections, records and anonymous types to SQL so this can be used with Dapper.
@@ -10,8 +12,23 @@ Implementation is provided for:
 * Generic SQL (`Select`, `Insert`, `Update`, `Delete`)
 * Specialized dialect MSSQL (`Upsert`)
 
-# Plain Old Record Object
-In order to read/write data, you will need to define a record first:
+# 📦 NuGet packages
+
+Package | Status | Description
+--------|--------|------------
+SqlDapper | [![Nuget](https://img.shields.io/nuget/v/SqlDapper)](https://nuget.org/packages/SqlDapper) | Core package
+SqlDapper.SqlServer | [![Nuget](https://img.shields.io/nuget/v/SqlDapper.SqlServer)](https://nuget.org/packages/SqlDapper.SqlServer) | SqlServer provider
+
+# 📚 Api
+
+## Namespace
+First you have to use `SqlDapper` namespace before proceeding:
+```C#
+using SqlDapper;
+``` 
+
+## Plain Old Record Object
+In order to read/write data, you will need to define a record first (or a class with **properties**):
 
 ```C#
 [Table("StatusEx")]
@@ -21,25 +38,17 @@ public record DbStatusEx([property: Key] string Name,
 ```
 
 Available attributes are:
-* `Table(name)`: force table name at class level. Default value is class name
-* `Key`: specify a property as a key (are part of key composite if multiple declarations)
+* `Table(name)`: force table name at class level. Default value is record/class name
+* `Key`: specify a property as a key (or part of key composite if multiple declarations)
 
-# Namespace
-First you have to use `SqlDapper` namespace before proceeding:
+## Create connection
+Choose a provider first (see `SqlDapper.SqlServer`) and create a new connection:
 ```C#
-using SqlDapper;
-``` 
-
-# Create connection
-Create a connection using `DapperConnection` implementing `IDapperConnection`.
-
-# Usage
-```C#
-var conn = new DapperConnection("<your connection string>");
+var conn = new SqlServerConnection("<your connection string>");
 var status = conn.Select<DbStatusEx>(new { Name = "toto" });
 ```
 
-# Raw connection methods
+## Raw connection methods
 Following operations are available (methods on `IDapperConnection`). Those operations are same as Dapper and basically allow unit testing the library:
 
 Operation | Description
@@ -49,7 +58,7 @@ Operation | Description
 `Query<T>` | Run provided sql query using the parameter and returns a list of result of `T`
 `TransactionScope` | Create a transaction scope - transaction must be disposed
 
-# Generic SQL builder methods
+## Generic SQL builder methods
 Following operations are available as extension methods on `IDapperConnection`:
 
 Operation | Description
@@ -62,7 +71,7 @@ Operation | Description
 
 `Insert`, `Update`, `Delete` support either a single value or a list. A value is either a record or an anonymous record.
 
-# MSSQL builder methods
+## SqlServer builder methods
 Following operations are available as extension methods on `IDapperConnection`:
 
 Operation | Description
