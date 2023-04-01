@@ -15,7 +15,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 7.0.202
+          dotnet-version: 6.0.405
 
       - name: Build & Test
         run: make test config=Release
@@ -34,7 +34,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 7.0.202
+          dotnet-version: 6.0.405
 
       - name: Build nuget
         run: make nuget config=Release version=${GITHUB_REF#refs/tags/} 
