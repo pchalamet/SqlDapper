@@ -12,8 +12,12 @@ public record DbStatusEx([property: Key] string Name, int Status, string? Commen
 [Table("Monitoring")]
 public record DbMonitoring([property: Key] string Name, [property: Key] int Count, int Status);
 
-
 public class SqlDapperTests {
+    [SetUp]
+    public static void ClearCache() {
+        SqlCache.Clear();
+    }
+
     [Test]
     public void GenSQLUpsert() {
         var prm = new { Name = "tagada", Status = 42 };

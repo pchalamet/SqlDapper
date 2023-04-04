@@ -6,7 +6,7 @@ This is a simple library to generate SQL based on POCO (or better PORO 🎉). Th
 
 It maps collections, records and anonymous types to SQL so this can be used with Dapper.
 
-This library does not cache and is reflection base - hence it's not the most efficient library around. It just works™️.
+This library is reflection based to generate SQL - but queries are cached then making it quite efficient after warmup.
 
 Implementation is provided for:
 * Generic SQL (`Select`, `Insert`, `Update`, `Delete`)
