@@ -76,7 +76,7 @@ Following operations are available as extension methods on `IDapperConnection`:
 
 Operation | Description
 ----------|------------
-`Upsert<Table>` | Upsert values into table `Table`. NOTE: as of now, Mssql centric.
+`Upsert<Table>` | Upsert values into table `Table`
 
 `Upsert` support either a single value or a list. A value is either a record or an anonymous record.
 
