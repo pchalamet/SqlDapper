@@ -106,7 +106,7 @@ public class SqlDapperTests {
         var repository = new MockRepository(MockBehavior.Strict);
         var conn = repository.Create<IDapperConnection>();
 
-        conn.Setup(dc => dc.Execute("DELETE [Status] WHERE [Name]=@Name AND [Status]=@Status", prm)).Returns(1);
+        conn.Setup(dc => dc.Execute("DELETE FROM [Status] WHERE [Name]=@Name AND [Status]=@Status", prm)).Returns(1);
 
         conn.Object.Delete<DbStatus>(prm);
 

@@ -1,9 +1,14 @@
 namespace SqlDapper;
 
 public static class DapperConnectionExtensions {
+    private const string insertKey = "insert";
+    private const string selectKey = "select";
+    private const string updateKey = "update";
+    private const string deleteKey = "delete";
+
     public static IEnumerable<Table> Select<Table>(this IDapperConnection connection, object conditions) {
         // SELECT Id, Toto FROM Table [WHERE Tutu=@Tutu]
-        if (!SqlCache.GetQuery<Table>(conditions, out var sql)) {
+        if (!SqlCache.GetQuery<Table>(selectKey, conditions, out var sql)) {
             var projection = typeof(Table).GetTableColumns().Select(TypeExtensions.EscapeName).Join(",");
             var from = typeof(Table).GetTable().EscapeName();
             var columns = conditions.GetType().GetTableColumns();
@@ -13,7 +18,7 @@ public static class DapperConnectionExtensions {
             };
 
             sql = $"SELECT {projection} FROM {from} WHERE {where}";
-            SqlCache.CacheQuery<Table>(conditions, sql);
+            SqlCache.CacheQuery<Table>(selectKey, conditions, sql);
         }
         return connection.Query<Table>(sql, conditions);
     }
@@ -24,14 +29,14 @@ public static class DapperConnectionExtensions {
 
     public static void Insert<Table>(this IDapperConnection connection, object entity) {
         // INSERT INTO Table (Id, Toto) VALUES (@Id, @Toto)
-        if (!SqlCache.GetQuery<Table>(entity, out var sql)) {
+        if (!SqlCache.GetQuery<Table>(insertKey, entity, out var sql)) {
             var into = typeof(Table).GetTable().EscapeName();
             var columns = entity.GetType().GetTableColumns();
             var projection = columns.Select(TypeExtensions.EscapeName).Join(",");
             var values = columns.Select(TypeExtensions.ParameterName).Join(",");
 
             sql = $"INSERT INTO {into} ({projection}) VALUES ({values})";
-            SqlCache.CacheQuery<Table>(entity, sql);
+            SqlCache.CacheQuery<Table>(insertKey, entity, sql);
         }
 
         var count = entity.GetCount();
@@ -42,7 +47,7 @@ public static class DapperConnectionExtensions {
 
     public static void Update<Table>(this IDapperConnection connection, object entity) {
         // UPDATE Table set @Toto=@Toto, @Tutu=@Tutu
-        if (!SqlCache.GetQuery<Table>(entity, out var sql)) {
+        if (!SqlCache.GetQuery<Table>(updateKey, entity, out var sql)) {
             var from = typeof(Table).GetTable().EscapeName();
             var ids = typeof(Table).GetTableKeys();
             var columns = entity.GetType().GetTableColumns();
@@ -50,7 +55,7 @@ public static class DapperConnectionExtensions {
             var where = ids.Select(c => $"{c.EscapeName()}=@{c}").Join(" AND ");
 
             sql = $"UPDATE {from} SET {assign} WHERE {where}";
-            SqlCache.CacheQuery<Table>(entity, sql);
+            SqlCache.CacheQuery<Table>(updateKey, entity, sql);
         }
 
         var count = entity.GetCount();
@@ -60,8 +65,8 @@ public static class DapperConnectionExtensions {
     }
 
     public static int Delete<Table>(this IDapperConnection connection, object conditions) {
-        // DELETE Table WHERE @Tutu=@Tutu
-        if (!SqlCache.GetQuery<Table>(conditions, out var sql)) {
+        // DELETE FROM Table WHERE @Tutu=@Tutu
+        if (!SqlCache.GetQuery<Table>(deleteKey, conditions, out var sql)) {
             var from = typeof(Table).GetTable().EscapeName();
             var columns = conditions.GetType().GetTableColumns();
             var where = columns.Select(c => $"{c.EscapeName()}=@{c}") switch {
@@ -69,8 +74,8 @@ public static class DapperConnectionExtensions {
                 _ => "1=1",
             };
 
-            sql = $"DELETE {from} WHERE {where}";
-            SqlCache.CacheQuery<Table>(conditions, sql);
+            sql = $"DELETE FROM {from} WHERE {where}";
+            SqlCache.CacheQuery<Table>(deleteKey, conditions, sql);
         }
 
         return connection.Execute(sql, conditions);

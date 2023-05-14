@@ -1,6 +1,8 @@
 namespace SqlDapper;
 
 public static class MssqlConnectionExtensions {
+    private const string upsertKey = "upsert";
+
     public static void Upsert<Table>(this IDapperConnection connection, object entity) {
         // MERGE INTO <Table> as TARGET
         // USING ( VALUES(@Name, @Status) ) AS SOURCE ([Name], [Status]) ON SOURCE.[Name] = TARGET.[Name]
@@ -8,7 +10,7 @@ public static class MssqlConnectionExtensions {
         //     SET [Status]=SOURCE.[Status]
         // WHEN NOT MATCHED THEN 
         //     INSERT ([Name],[Status]) VALUES (SOURCE.[Name], SOURCE.[Status]);
-        if (!SqlCache.GetQuery<Table>(entity, out var sql)) {
+        if (!SqlCache.GetQuery<Table>(upsertKey, entity, out var sql)) {
             var entityType = entity.GetType().GetUnderlyingType();
             var table = typeof(Table).GetTable().EscapeName();
             var columns = entityType.GetTableColumns();
@@ -21,7 +23,7 @@ public static class MssqlConnectionExtensions {
             var where = ids.Select(c => $"SOURCE.{c.EscapeName()}=TARGET.{c.EscapeName()}").Join(" AND ");
 
             sql = $"MERGE INTO {table} as TARGET USING (VALUES({values})) AS SOURCE ({projection}) ON {where} WHEN MATCHED THEN UPDATE SET {assignMatched} WHEN NOT MATCHED THEN INSERT ({projection}) VALUES ({assignUnmatched});";
-            SqlCache.CacheQuery<Table>(entity, sql);
+            SqlCache.CacheQuery<Table>(upsertKey, entity, sql);
         }
 
         var count = entity.GetCount();

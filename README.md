@@ -9,7 +9,7 @@ It maps collections, records and anonymous types to SQL so this can be used with
 This library is reflection based to generate SQL - but queries are cached then making it quite efficient after warmup.
 
 Implementation is provided for:
-* Generic SQL (`Select`, `Insert`, `Update`, `Delete`)
+* Generic SQL (`Select`, `Insert`, `Update`, `Delete`, `DapperConnection<T>`)
 * Specialized dialect MSSQL (`Upsert`)
 
 # 📦 NuGet packages
@@ -42,9 +42,9 @@ Available attributes are:
 * `Key`: specify a property as a key (or part of key composite if multiple declarations)
 
 ## Create connection
-Choose a provider first (see `SqlDapper.SqlServer`) and create a new connection:
+You have first to import an ADO.Net provider (SQLServer, SQlite...). A connection can then be created (for exemple for `SQlite`):
 ```C#
-var conn = new SqlServerConnection("<your connection string>");
+var conn = new DapperConnection<SQLiteConnection>("Data Source=sqldapper.db");
 var status = conn.Select<DbStatusEx>(new { Name = "toto" });
 ```
 

@@ -4,12 +4,12 @@ using Dapper;
 
 namespace SqlDapper;
 
-public abstract class DapperConnection : IDapperConnection {
+public class DapperConnection<DBConnection> : IDapperConnection where DBConnection : IDbConnection, new() {
     private readonly Lazy<TransactionScope> tx = new(() => new TransactionScope());
     private readonly Lazy<IDbConnection> connection;
 
-    protected DapperConnection(string connectionString) {
-        connection = new(() => CreateConnection(connectionString));
+    public DapperConnection(string connectionString) {
+        connection = new(() => new DBConnection { ConnectionString = connectionString });
     }
 
     public void Dispose() {
@@ -37,6 +37,4 @@ public abstract class DapperConnection : IDapperConnection {
     public IDapperTransactionScope TransactionScope() {
         return new DapperTransactionScope(tx.Value);
     }
-
-    protected abstract IDbConnection CreateConnection(string connectionString);
 }
